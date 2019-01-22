@@ -1,6 +1,6 @@
 import csv
-import os
 import time
+import connection
 
 
 ANSWERS_HEADER = ['id', 'submission_time', 'vote_number', 'question_id', 'message', 'image']
@@ -79,3 +79,19 @@ def get_time():
     :return: {string}
     """
     return time.time()
+
+
+# ---------------------------------------------------------------------------------
+
+
+#TEST
+@connection.connection_handler
+def get_questions(cursor):
+    cursor.execute("""
+                    SELECT title FROM question;
+                   """)
+    names = cursor.fetchall()
+    return names
+
+
+print(get_questions())
