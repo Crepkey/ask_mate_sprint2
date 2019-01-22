@@ -1,0 +1,63 @@
+{% extends 'layout.html' %}
+
+{% block title %}AskMate | Details{% endblock %}
+
+{% block content %}
+    <h1>{{ title }}</h1>
+
+    <table class=table1 style="width: 100%">
+
+        <tr>
+            {% for header in question_header %}
+                <th>{{ header }}</th>
+            {% endfor %}
+        </tr>
+        <tr>
+            {% for qdata in question %}
+                <td align="center">{{ question[qdata] }}</td>
+            {% endfor %}
+        </tr>
+
+    </table>
+
+    <br>
+
+    <form action="/question/{{ question['id'] }}/new-answer">
+        <button onclick="location.href= '{{ url_for('add_answer', question_id=question['id']) }}'" type="button"
+                style="float: right">
+            Answer
+        </button>
+    </form>
+
+    <h3>Answers</h3>
+
+    <table class=table1 style="width: 100%">
+
+        <tr>
+            {% for header in answers_header %}
+                <th>{{ header }}</th>
+            {% endfor %}
+        </tr>
+
+        {% for answer in answers %}
+            <tr>
+                {% for detail in answer %}
+                    <td align="center">{{ answer[detail] }}</td>
+                {% endfor %}
+            </tr>
+        {% endfor %}
+
+
+    </table>
+    <br>
+
+    <div class="wrapper">
+        <form action="/question/{{ question['id'] }}/new-answer">
+            <button onclick="location.href= '/'" type="button"
+            >
+                Back to the Main Page
+            </button>
+        </form>
+    </div>
+
+{% endblock %}

@@ -1,0 +1,22 @@
+{% extends 'layout.html' %}
+
+{% block title %}AskMate | Add new answer{% endblock %}
+
+{% block content %}
+    <h1>Add new answer</h1>
+    <form action="{{ answer_url }}" method="post">
+        <h3>Answer:</h3>
+        <textarea name="answer" rows="6" cols="50" minlength="10" required></textarea>
+
+        <p>
+            <button type="submit" style="float: left"> Add answer</button>
+        </p>
+    </form>
+    <div class="wrapper">
+        <form action=action="{{ question_url }}" method="post">
+            <button onclick="location.href= '/'" type="button">
+                Back to the Main Page
+            </button>
+        </form>
+    </div>
+{% endblock %}
