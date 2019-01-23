@@ -27,14 +27,21 @@ def get_question_details(question_id):
             answers = {list which has dictionaries}
             answers_header = {list}
         """
-    question = data_manager.read_from_csv(id=question_id)
-    title = copy.deepcopy(question["title"])
+    question = data_manager.get_question_by_id(id=question_id)[0]
+    title = question["title"]
     del question["title"]
-    question_header = util.create_header(question)
+    question_header = [header.replace("_", " ").capitalize() for header in question.keys()]
 
-    all_answers = data_manager.read_from_csv(data_manager.ANSWER_FILE_PATH)
-    answers = [answer for answer in all_answers if answer["question_id"] == question_id]
-    answers_header = util.create_header(question)
+    answers = data_manager.get_answer_by_question_id(question_id=question_id)
+
+    # This decision is necessary because if
+    # a question doesn't have any answer then the program has to use another way to handle it
+
+    if len(answers) > 0:
+        answers_header = [header.replace("_", " ").capitalize() for header in answers[0].keys()]
+    else:
+        answers = [{'TEST': 'There are no answers here'}]
+        answers_header = []
 
     return render_template('question_details.html',
                            question=question,

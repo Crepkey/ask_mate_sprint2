@@ -80,7 +80,7 @@ def get_time():
     """
     return time.time()
 
-
+# -------------------------------------------DATA BASE FUNCTIONS----------------------------------------------------------
 @connection.connection_handler
 def get_questions(cursor):
     """
@@ -91,5 +91,24 @@ def get_questions(cursor):
     cursor.execute("""
                     SELECT id ,title FROM question;
                    """)
+    names = cursor.fetchall()
+    return names
+
+@connection.connection_handler
+def get_question_by_id(cursor, id):
+    cursor.execute("""
+                    SELECT * FROM question
+                    WHERE id = %(id)s;
+    """, {'id': id})
+    names = cursor.fetchall()
+    return names
+
+
+@connection.connection_handler
+def get_answer_by_question_id(cursor, question_id):
+    cursor.execute("""
+                    SELECT * FROM answer
+                    WHERE question_id = %(question_id)s;
+    """, {'question_id': question_id})
     names = cursor.fetchall()
     return names
