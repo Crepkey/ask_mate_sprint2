@@ -81,6 +81,8 @@ def get_time():
     return time.time()
 
 
+# ---------------------------------------------------------------------------------
+
 @connection.connection_handler
 def get_questions(cursor):
     """
@@ -93,3 +95,27 @@ def get_questions(cursor):
                    """)
     names = cursor.fetchall()
     return names
+
+
+@connection.connection_handler
+def add_question(cursor, new_question):
+    """
+    This function inserts a new row to the question table,
+    after that it returns the id of the new question.
+
+    :param new_question: Dictionary - It contains the data for the new question
+    :return: Int - ID of the new question
+    """
+    cursor.execute("""
+                    INSERT INTO question(submission_time, title, message)
+                    VALUES
+                     (%(submission_time)s, %(title)s, %(message)s);
+                   """,
+                   new_question)
+    cursor.execute("""
+                    SELECT id FROM question
+                    WHERE title = %(title)s;
+                       """,
+                   new_question)
+    id = cursor.fetchall()
+    return id
