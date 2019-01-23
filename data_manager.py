@@ -136,3 +136,18 @@ def add_question(cursor, new_question):
                    new_question)
     id = cursor.fetchall()
     return id
+
+
+@connection.connection_handler
+def add_answer(cursor, new_answer):
+    """
+    This function inserts a new row to the answer table.
+
+    :param new_answer: Dictionary - It contains the data for the new answer
+    """
+    cursor.execute("""
+                    INSERT INTO answer(submission_time, question_id, message)
+                    VALUES
+                     (%(submission_time)s, %(question_id)s, %(message)s);
+                   """,
+                   new_answer)
