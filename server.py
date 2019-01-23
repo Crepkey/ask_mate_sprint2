@@ -1,7 +1,5 @@
 from flask import Flask, render_template, request, redirect, url_for
 import data_manager
-import util
-import copy
 from datetime import datetime
 
 app = Flask(__name__)
@@ -35,7 +33,7 @@ def get_question_details(question_id):
 
     answers = data_manager.get_answer_by_question_id(question_id=question_id)
 
-    # This decision is necessary because if
+    # This decision below is necessary because if
     # a question doesn't have any answer then the program has to use another way to handle it
 
     if len(answers) > 0:

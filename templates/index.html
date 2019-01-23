@@ -3,31 +3,31 @@
 {% block title %}AskMate | Welcome!{% endblock %}
 
 {% block content %}
-<h1>Ask Mate</h1>
-<p>
-<form action="{{ url_for('add_question') }}">
-    <button onclick="location.href= '{{ url_for('add_question') }}'" type="button"
-            style="float: left">
-        Add new question
-    </button>
-</form>
-<br>
-<br>
-</p>
+    <h1>Ask Mate</h1>
+    <p>
+    <form>
+        <button onclick="location.href= '{{ url_for('add_question') }}'" type="button"
+                style="float: left">
+            Add new question
+        </button>
+    </form>
+    <br>
+    <br>
+    </p>
 
-<table class="table1">
-    <tr>
-        <th>ID</th>
-        <th>Questions</th>
-        <th>Open</th>
-    </tr>
-    {% for row in  sorted_messages %}
+    <table class="table1">
         <tr>
-            <td>{{ row['id'] }}</td>
-            <td>{{ row['title'] }}</td>
-            <td><a href="{{ url_for('get_question_details', question_id=row['id']) }}">Open</a></td>
+            <th>ID</th>
+            <th>Questions</th>
+            <th>Open</th>
         </tr>
-    {% endfor %}
-</table>
+        {% for row in  sorted_messages %}
+            <tr>
+                <td>{{ row['id'] }}</td>
+                <td>{{ row['title'] }}</td>
+                <td><a href="{{ url_for('get_question_details', question_id=row['id']) }}">Open</a></td>
+            </tr>
+        {% endfor %}
+    </table>
 {% endblock %}
 
