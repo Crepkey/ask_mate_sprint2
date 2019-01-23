@@ -81,17 +81,15 @@ def get_time():
     return time.time()
 
 
-# ---------------------------------------------------------------------------------
-
-
-#TEST
 @connection.connection_handler
 def get_questions(cursor):
+    """
+    This function returns all the questions (ID and Title)
+    :param cursor:
+    :return: A list of dictionaries
+    """
     cursor.execute("""
-                    SELECT title FROM question;
+                    SELECT id ,title FROM question;
                    """)
     names = cursor.fetchall()
     return names
-
-
-print(get_questions())

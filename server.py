@@ -9,7 +9,7 @@ app = Flask(__name__)
 @app.route('/')
 @app.route('/index')
 def index():
-    sorted_messages = util.sort_by_key()
+    sorted_messages = data_manager.get_questions()
     return render_template('index.html', sorted_messages=sorted_messages)
 
 
