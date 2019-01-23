@@ -2,6 +2,7 @@ from flask import Flask, render_template, request, redirect, url_for
 import data_manager
 import util
 import copy
+from datetime import datetime
 
 app = Flask(__name__)
 
@@ -55,20 +56,20 @@ def get_question_details(question_id):
 def add_question():
     if request.method == 'GET':
         return render_template('add_question.html')
-    else:
+
+    if request.method == 'POST':
+
+        # Generating the final dictionary for the new question
         new_question = {
+            'submission_time': datetime.now(),
             'title': request.form.get('title'),
             'message': request.form.get('message')
         }
 
-        # Generating the final dictionary for the new question
-        new_question_final = data_manager.collect_data(new_question)
-
-        # Writing the new question to the csv
-        data_manager.write_to_csv(new_question_final)
+        # Writing the new question to the database and getting back the id of the new question
+        question_id = data_manager.add_question(new_question)[0]['id']
 
         # Generating the URL for the new question
-        question_id = new_question_final['id']
         question_url = url_for('get_question_details', question_id=question_id)
 
         return redirect(question_url)
