@@ -52,6 +52,10 @@ def get_question_details(question_id):
 
 @app.route('/add-question', methods=['GET', 'POST'])
 def add_question():
+    """
+    This function directs to a page with a form where we can add a new question,
+    after that it inserts the new question to the database and redirects to the new question's page.
+    """
     if request.method == 'GET':
         return render_template('add_question.html')
 
@@ -76,24 +80,25 @@ def add_question():
 @app.route('/question/<question_id>/new-answer', methods=['GET', 'POST'])
 def add_answer(question_id):
     """
-    Add a new answer to the selected question
-    on the Question Details page
-    Args:
-        question_id (string): the ID of the selected question
-    Returns:
-        question_url (string): the URL back to the selected question
+    This function directs to a page with a form where we can add a new answer to the selected question,
+    after that it inserts the new answer to the database and redirects to the selected question's page.
+
+    :param question_id: (string)- the ID of the selected question
     """
     if request.method == 'GET':
         return render_template('add_answer.html')
-    else:
-        new_answer = {'message': request.form.get('answer')}
+
+    if request.method == 'POST':
 
         # Generating the final dictionary for the new answer
-        new_answer_final = data_manager.collect_data(new_answer, header=data_manager.ANSWERS_HEADER)
-        new_answer_final['question_id'] = question_id
+        new_answer = {
+            'submission_time': datetime.now(),
+            'question_id': int(question_id),
+            'message': request.form.get('answer')
+        }
 
-        # Writing the new answer to the csv
-        data_manager.write_to_csv(new_answer_final, data_manager.ANSWER_FILE_PATH)
+        # Writing the new answer to the database
+        data_manager.add_answer(new_answer)
 
         # Generating the URL for the question which the answer belongs to
         question_url = url_for('get_question_details', question_id=question_id)
