@@ -1,0 +1,59 @@
+body{
+    background-image: url('/static/images/background2.jpg');
+}
+
+
+h1{
+
+}
+
+
+h3{
+
+}
+
+
+textarea{
+
+}
+
+
+input{
+
+}
+
+
+button{
+
+}
+
+
+table{
+
+}
+
+
+.wrapper{
+
+}
+
+
+/* unvisited link */
+a:link {
+    color: darkgreen;
+}
+
+/* visited link */
+a:visited {
+    color: mediumpurple;
+}
+
+/* mouse over link */
+a:hover {
+    color: lightcoral;
+}
+
+/* selected link */
+a:active {
+    color: blue;
+}
