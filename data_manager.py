@@ -118,16 +118,16 @@ def search(cursor, search_phrase):
                    """,
                    {'search_phrase': '%' + search_phrase + '%'})
     found_questions = cursor.fetchall()
-    ids = []
-    for question in found_questions:
-        for id in question.values():
-           ids.append(id)
-    ids = tuple(ids)
-    cursor.execute("""
-                         SELECT * FROM question
-                         WHERE id IN %s;
-                       """, (ids,))
-    questions = cursor.fetchall()
-
-    return questions
+    if found_questions:
+        ids = []
+        for question in found_questions:
+            for id in question.values():
+               ids.append(id)
+        ids = tuple(ids)
+        cursor.execute("""
+                             SELECT * FROM question
+                             WHERE id IN %s;
+                           """, (ids,))
+        questions = cursor.fetchall()
+        return questions
 

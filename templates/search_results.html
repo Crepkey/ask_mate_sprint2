@@ -5,18 +5,22 @@
 {% block content %}
     <h1>Ask Mate</h1>
     <table class="table1">
+        {% if found_questions %}
         <tr>
             <th>ID</th>
             <th>Questions</th>
             <th>Open</th>
         </tr>
-        {% for row in  found_questions %}
-            <tr>
-                <td>{{ row['id'] }}</td>
-                <td>{{ row['title'] }}</td>
-                <td><a href="{{ url_for('get_question_details', question_id=row['id']) }}">Open</a></td>
-            </tr>
-        {% endfor %}
+            {% for row in  found_questions %}
+                <tr>
+                    <td>{{ row['id'] }}</td>
+                    <td>{{ row['title'] }}</td>
+                    <td><a href="{{ url_for('get_question_details', question_id=row['id']) }}">Open</a></td>
+                </tr>
+            {% endfor %}
+        {% else %}
+            <td align="center">There is no search result</td>
+        {% endif %}
     </table>
 {% endblock %}
 

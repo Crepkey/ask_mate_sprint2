@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for, session
 import data_manager
 from datetime import datetime
 
@@ -7,6 +7,10 @@ app = Flask(__name__)
 
 @app.route('/', methods=['GET','POST'])
 def index():
+
+    # This row is responsible for adding the current url to the session
+    session['current_url'] = url_for('index')
+
     if request.method == 'GET':
         sorted_messages = data_manager.get_questions()
         return render_template('index.html', sorted_messages=sorted_messages)
@@ -29,13 +33,15 @@ def get_question_details(question_id):
             answers = {list which has dictionaries}
             answers_header = {list}
         """
+
+    session['current_url'] = url_for('get_question_details', question_id=question_id)
+
     question = data_manager.get_question_by_id(id=question_id)[0]
     title = question["title"]
     del question["title"]
     question_header = [header.replace("_", " ").capitalize() for header in question.keys()]
 
     answers = data_manager.get_answer_by_question_id(question_id=question_id)
-
     # This decision below is necessary because if
     # a question doesn't have any answer then the program has to use another way to handle it
 
@@ -58,6 +64,9 @@ def add_question():
     This function directs to a page with a form where we can add a new question,
     after that it inserts the new question to the database and redirects to the new question's page.
     """
+
+    session['current_url'] = url_for('add_question')
+
     if request.method == 'GET':
         return render_template('add_question.html')
 
@@ -87,6 +96,9 @@ def add_answer(question_id):
 
     :param question_id: (string)- the ID of the selected question
     """
+
+    session['current_url'] = url_for('add_answer', question_id=question_id)
+
     if request.method == 'GET':
         return render_template('add_answer.html', question_id=question_id)
 
@@ -115,6 +127,9 @@ def edit_answer(answer_id):
     after that it updates the database and redirects to the question_details page.
     :param answer_id: (string)- the ID of the selected answer
     """
+
+    session['current_url'] = url_for('edit_answer', answer_id=answer_id)
+
     if request.method == 'GET':
 
         # Reading the original answer from the database
@@ -139,13 +154,22 @@ def edit_answer(answer_id):
         return redirect(question_url)
 
 
-@app.route('/search/<search_phrase>')
-def search(search_phrase):
-    found_questions = data_manager.search(search_phrase)
+@app.route('/search')
+def search():
+    session['current_url'] = url_for('search')
+    found_questions = data_manager.search(request.args.get('search_phrase'))  #TODO
     return render_template('search_results.html', found_questions=found_questions)
 
 
+@app.route('/theme', methods=['POST'])
+def change_theme():
+    previous_url = session['current_url']
+    session['theme'] = request.form.get('theme')
+    return redirect(previous_url)
+
+
 if __name__ == "__main__":
+    app.secret_key = 'FuckDaCSS'
     app.run(
         debug=True,
         port=5000

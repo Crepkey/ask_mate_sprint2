@@ -3,9 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <title>{% block title %} {% endblock %}</title>
+    {% if session['theme'] == 'green' %}
     <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+    {% elif session['theme'] == 'red' %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/new.css') }}">
+    {% endif %}
 </head>
 <body>
-    {% block content %} {% endblock %}
+{% block content %} {% endblock %}
+
+<form action="{{ url_for('change_theme') }}" method="post" align="right">
+    <select name="theme">
+        <option value="red">Red</option>
+        <option value="green">Green</option>
+    </select>
+    <button type="submit">Change theme</button>
+</form>
+
 </body>
 </html>
