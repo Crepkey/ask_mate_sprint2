@@ -4,7 +4,16 @@
 
 {% block content %}
     <h1>Ask Mate</h1>
-    <p>
+
+    <form action=" {{ url_for('index') }}" method="post">
+        <p>
+            <button type="submit" style="float: right"> Search</button>
+        </p>
+        </p>
+        <p>
+            <input type="text" name="search_phrase" style="float: right" value="Type here for searching" required>
+        </p>
+    </form>
     <form>
         <button onclick="location.href= '{{ url_for('add_question') }}'" type="button"
                 style="float: left">

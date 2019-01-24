@@ -1,4 +1,5 @@
 import connection
+import copy
 
 @connection.connection_handler
 def get_questions(cursor):
@@ -70,3 +71,28 @@ def add_answer(cursor, new_answer):
                      (%(submission_time)s, %(question_id)s, %(message)s);
                    """,
                    new_answer)
+
+@connection.connection_handler
+def search(cursor, search_phrase):
+    cursor.execute("""
+                     SELECT id FROM question
+                     WHERE title LIKE %(search_phrase)s OR message LIKE %(search_phrase)s
+                     UNION
+                     SELECT question_id FROM answer
+                     WHERE message LIKE %(search_phrase)s;
+                   """,
+                   {'search_phrase': '%' + search_phrase + '%'})
+    found_questions = cursor.fetchall()
+    ids = []
+    for question in found_questions:
+        for id in question.values():
+           ids.append(id)
+    ids = tuple(ids)
+    cursor.execute("""
+                         SELECT * FROM question
+                         WHERE id IN %s;
+                       """, (ids,))
+    questions = cursor.fetchall()
+
+    return questions
+

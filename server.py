@@ -5,11 +5,14 @@ from datetime import datetime
 app = Flask(__name__)
 
 
-@app.route('/')
-@app.route('/index')
+@app.route('/', methods=['GET','POST'])
 def index():
-    sorted_messages = data_manager.get_questions()
-    return render_template('index.html', sorted_messages=sorted_messages)
+    if request.method == 'GET':
+        sorted_messages = data_manager.get_questions()
+        return render_template('index.html', sorted_messages=sorted_messages)
+    if request.method == 'POST':
+        search_phrase = request.form.get('search_phrase')
+        return redirect(url_for('search', search_phrase=search_phrase))
 
 
 @app.route('/question/<question_id>')
@@ -104,6 +107,12 @@ def add_answer(question_id):
         question_url = url_for('get_question_details', question_id=question_id)
 
         return redirect(question_url)
+
+
+@app.route('/search/<search_phrase>')
+def search(search_phrase):
+    found_questions = data_manager.search(search_phrase)
+    return render_template('search_results.html', found_questions=found_questions)
 
 
 if __name__ == "__main__":
