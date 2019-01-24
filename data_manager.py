@@ -1,5 +1,5 @@
 import connection
-import copy
+
 
 @connection.connection_handler
 def get_questions(cursor):
@@ -13,6 +13,7 @@ def get_questions(cursor):
                    """)
     names = cursor.fetchall()
     return names
+
 
 @connection.connection_handler
 def get_question_by_id(cursor, id):
@@ -71,6 +72,40 @@ def add_answer(cursor, new_answer):
                      (%(submission_time)s, %(question_id)s, %(message)s);
                    """,
                    new_answer)
+
+
+@connection.connection_handler
+def get_answer_message_by_id(cursor, id):
+    cursor.execute("""
+                    SELECT message FROM answer
+                    WHERE id = %(id)s;
+    """, {'id': id})
+    names = cursor.fetchall()
+    return names
+
+
+@connection.connection_handler
+def update_answer(cursor, updated_answer):
+    """
+    This function updates a row in the answer table.
+
+    :param updated_answer: Dictionary - It contains the data for the updated answer
+    :return: Int - ID of the question which the answer belongs to
+    """
+    cursor.execute("""
+                    UPDATE answer
+                    SET submission_time=%(submission_time)s,
+                    message=%(message)s 
+                    WHERE id=%(id)s;
+                   """,
+                   updated_answer)
+    cursor.execute("""
+                        SELECT question_id FROM answer
+                        WHERE message = %(message)s;
+                           """,
+                   updated_answer)
+    id = cursor.fetchall()
+    return id
 
 @connection.connection_handler
 def search(cursor, search_phrase):
