@@ -163,9 +163,8 @@ def search():
 
 @app.route('/theme', methods=['POST'])
 def change_theme():
-    previous_url = session['current_url']
     session['theme'] = request.form.get('theme')
-    return redirect(previous_url)
+    return redirect(request.referrer)
 
 
 if __name__ == "__main__":

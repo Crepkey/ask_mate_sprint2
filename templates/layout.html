@@ -4,14 +4,14 @@
     <meta charset="UTF-8">
     <title>{% block title %} {% endblock %}</title>
     {% if session['theme'] == 'green' %}
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}"> {# TODO #}
     {% elif session['theme'] == 'red' %}
     <link rel="stylesheet" href="{{ url_for('static', filename='css/new.css') }}">
     {% endif %}
 </head>
 <body>
 {% block content %} {% endblock %}
-
+<br>
 <form action="{{ url_for('change_theme') }}" method="post" align="right">
     <select name="theme">
         <option value="red">Red</option>
